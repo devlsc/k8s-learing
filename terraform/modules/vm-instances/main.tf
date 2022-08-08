@@ -6,6 +6,7 @@ module "vm-instances1" {
     format = "qcow2"
     name   = "fedora1.qcow2"
   }
+  network_name = "kubernetes-nw"
   domain = {
     memory = "2024"
     name   = "fedora"

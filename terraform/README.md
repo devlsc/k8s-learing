@@ -9,3 +9,14 @@
 ### Notes
 * Install mkisofs `pacman -S cdrkit`
 
+* [creating kvm setup for k8s](https://github.com/Pick1a1username/kubernetes-the-hard-way-on-kvm/blob/master/docs/02-compute-resources.md)
+* [provisioning stuff](https://registry.terraform.io/providers/multani/libvirt/latest/docs/resources/network)
+
+
+### Useful commands
+
+
+List all networks: `$ virsh net-list all` </br>
+Create a new network: `$ virsh net-define --file <FILE>`
+Start the network: `$ virsh net-start <NW-NAME>`
+

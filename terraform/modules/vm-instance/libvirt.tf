@@ -1,7 +1,7 @@
 # Defining VM Volume
 resource "libvirt_volume" "fedora-qcow2" {
   count  = var.amount
-  name   = "${var.volume.name}-${count.index}"
+  name   = "${var.domain.name}-${count.index}.${var.volume.format}"
   pool   = "default"
   source = var.volume.source
   format = var.volume.format
@@ -15,7 +15,7 @@ data "template_file" "user_data" {
 # Use CloudInit to add the instance
 resource "libvirt_cloudinit_disk" "commoninit" {
   count     = var.amount
-  name      = "${var.cloudinit}-${count.index}"
+  name      = "${var.domain.name}-${count.index}"
   pool      = "default" # List storage pools using virsh pool-list
   user_data = data.template_file.user_data.rendered
 }
@@ -28,7 +28,7 @@ resource "libvirt_domain" "fedora" {
   vcpu   = var.domain.vcpu
 
   network_interface {
-    network_name   = "default"
+    network_name   = var.network_name
     wait_for_lease = "true"
   }
 

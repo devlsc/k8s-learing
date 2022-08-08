@@ -4,7 +4,6 @@ variable "amount" {
 }
 variable "volume" {
   type = object({
-    name   = string
     source = string
     format = string
   })
@@ -14,6 +13,10 @@ variable "cloudinit" {
   type = string
 }
 
+
+variable "network_name" {
+  type = string
+}
 
 
 variable "domain" {
