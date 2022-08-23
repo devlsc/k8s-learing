@@ -1,6 +1,5 @@
 ### THIS IS GARBAGE
 
-
 * create modules and understand whats going on
 * do I need to commit the .terraform
 * manage state with at least a local postgres or something for better understanding
@@ -15,11 +14,11 @@
 
 ### TODOS
 * remove sensitive data from state [read carefully](https://www.terraform.io/language/settings/backends/configuration#credentials-and-sensitive-data)
-
+* local dns resolving for vms
 ### Useful commands
 
 List all networks: `$ virsh net-list --all` </br>
-Create a new network: `$ virsh net-define --file <FILE>`
-Start the network: `$ virsh net-start <NW-NAME>`
-Delete all spawned inactive vms `sudo virsh list --inactive --name | xargs -r -n 1 sudo virsh undefine`
+Create a new network: `$ virsh net-define --file <FILE>` </br>
+Start the network: `$ virsh net-start <NW-NAME>` </br>
+Delete all spawned inactive vms `sudo virsh list --inactive --name | xargs -r -n 1 sudo virsh undefine` </br>
 
