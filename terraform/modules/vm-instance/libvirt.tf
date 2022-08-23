@@ -20,12 +20,16 @@ resource "libvirt_cloudinit_disk" "commoninit" {
   user_data = data.template_file.user_data.rendered
 }
 
+
+
 # Define KVM domain to create
 resource "libvirt_domain" "fedora" {
-  count  = var.amount
-  name   = "${var.domain.name}-${count.index}"
-  memory = var.domain.memory
-  vcpu   = var.domain.vcpu
+  count      = var.amount
+  name       = "${var.domain.name}-${count.index}"
+  memory     = var.domain.memory
+  vcpu       = var.domain.vcpu
+  qemu_agent = true
+
 
   network_interface {
     network_name   = var.network_name
