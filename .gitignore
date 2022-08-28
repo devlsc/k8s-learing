@@ -2,3 +2,4 @@ CentOS-7-x86_64-GenericCloud.qcow2
 .terraform
 *.tfstate
 *.qcow2
+terraform/**/data

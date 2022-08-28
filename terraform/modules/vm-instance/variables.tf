@@ -9,12 +9,15 @@ variable "volume" {
   })
 }
 
-variable "cloudinit" {
+variable "network_name" {
   type = string
 }
 
+variable "ip_offset" {
+  type = number
+}
 
-variable "network_name" {
+variable "ip_prefix" {
   type = string
 }
 
