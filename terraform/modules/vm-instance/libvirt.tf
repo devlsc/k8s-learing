@@ -34,7 +34,7 @@ resource "libvirt_domain" "vm-instance" {
 
   network_interface {
     network_name = var.network_name
-    hostname     = "${var.domain.name}_${count.index}.${var.network_name}"
+    hostname     = "${var.domain.name}-${count.index}.${var.network_name}"
     # 
     # LIBVIRT-0001:
     # Seems like we can't simply get a random IP address in combination with the "hostname" attribute.

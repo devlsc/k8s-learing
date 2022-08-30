@@ -1,0 +1,25 @@
+workers:
+  hosts:
+    worker-0.kubernetes:
+    worker-1.kubernetes:
+    worker-2.kubernetes:
+controller:
+  hosts:
+    controller-0.kubernetes:
+    controller-1.kubernetes:
+    controller-2.kubernetes:
+client:
+  hosts:
+    client-0.kubernetes:
+load-balancer:
+  hosts:
+    lb-0.kubernetes:
+
+kubernetes-cluster:
+  children:
+    workers:
+    controller:
+    client:
+    load-balancer:
+
+
