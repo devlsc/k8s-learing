@@ -1,0 +1,33 @@
+#!/usr/bin/bash
+
+
+for num in 0 1 2; do
+cat > worker-${num}-csr.json <<EOF
+{
+  "CN": "system:node:worker-${num}",
+  "key": {
+    "algo": "rsa",
+    "size": 2048
+  },
+  "names": [
+    {
+      "C": "US",
+      "L": "Portland",
+      "O": "system:nodes",
+      "OU": "Kubernetes The Hard Way",
+      "ST": "Oregon"
+    }
+  ]
+}
+EOF
+
+INTERNAL_IP=$(dril worker-${num}.kubernetes)
+
+cfssl gencert \
+  -ca=ca.pem \
+  -ca-key=ca-key.pem \
+  -config=ca-config.json \
+  -hostname=worker-${num},${INTERNAL_IP} \
+  -profile=kubernetes \
+  worker-${num}-csr.json | cfssljson -bare worker-${num}
+done

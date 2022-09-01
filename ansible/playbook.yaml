@@ -1,8 +1,42 @@
-- name: CA configuration
-  hosts: kubernetes-cluster
+- name: CA configuration worker
+  hosts: workers
   tasks:
-    - name: Ping my hosts
-      ansible.builtin.ping:
-    - name: Print message
-      ansible.builtin.debug:
-        msg: Hello world
+    - name: copy worker keys
+      ansible.builtin.copy:
+        src: /home/leon/dev/k8s-learing/pki/{{ inventory_hostname|replace('.kubernetes','') }}-key.pem
+        dest: ~/
+        owner: leon
+        group: wheel
+        mode: 0644
+    - name: copy worker certs
+      ansible.builtin.copy:
+        src: /home/leon/dev/k8s-learing/pki/{{ inventory_hostname|replace('.kubernetes','') }}.pem
+        dest: ~/
+        owner: leon
+        group: wheel
+        mode: 0644
+    - name: copy CA to worker
+      ansible.builtin.copy:
+        src: /home/leon/dev/k8s-learing/pki/ca.pem
+        dest: ~/
+        owner: leon
+        group: wheel
+        mode: 0644
+
+- name: CA configuration controller
+  hosts: controller
+  tasks:
+    - name: copy controller service account key
+      ansible.builtin.copy:
+        src: /home/leon/dev/k8s-learing/pki/service-account-key.pem
+        dest: ~/
+        owner: leon
+        group: wheel
+        mode: 0644
+    - name: copy controller service account cert
+      ansible.builtin.copy:
+        src: /home/leon/dev/k8s-learing/pki/service-account.pem
+        dest: ~/
+        owner: leon
+        group: wheel
+        mode: 0644
