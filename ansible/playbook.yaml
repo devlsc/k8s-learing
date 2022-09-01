@@ -22,10 +22,46 @@
         owner: leon
         group: wheel
         mode: 0644
+    - name: worker kubeconfig
+      ansible.builtin.copy:
+        src: /home/leon/dev/k8s-learing/k8s-config/{{ inventory_hostname|replace('.kubernetes','') }}.kubeconfig
+        dest: ~/
+        owner: leon
+        group: wheel
+        mode: 0644
+
 
 - name: CA configuration controller
   hosts: controller
   tasks:
+    - name: copy kubernetes.pem
+      ansible.builtin.copy:
+        src: /home/leon/dev/k8s-learing/pki/kubernetes.pem
+        dest: ~/
+        owner: leon
+        group: wheel
+        mode: 0644
+    - name: copy kubernetes-key.pem
+      ansible.builtin.copy:
+        src: /home/leon/dev/k8s-learing/pki/kubernetes-key.pem
+        dest: ~/
+        owner: leon
+        group: wheel
+        mode: 0644
+    - name: copy ca-key
+      ansible.builtin.copy:
+        src: /home/leon/dev/k8s-learing/pki/ca-key.pem
+        dest: ~/
+        owner: leon
+        group: wheel
+        mode: 0644
+    - name: copy ca
+      ansible.builtin.copy:
+        src: /home/leon/dev/k8s-learing/pki/ca.pem
+        dest: ~/
+        owner: leon
+        group: wheel
+        mode: 0644
     - name: copy controller service account key
       ansible.builtin.copy:
         src: /home/leon/dev/k8s-learing/pki/service-account-key.pem
@@ -36,6 +72,34 @@
     - name: copy controller service account cert
       ansible.builtin.copy:
         src: /home/leon/dev/k8s-learing/pki/service-account.pem
+        dest: ~/
+        owner: leon
+        group: wheel
+        mode: 0644
+    - name: copy admin.kubeconfig
+      ansible.builtin.copy:
+        src: /home/leon/dev/k8s-learing/k8s-config/admin.kubeconfig
+        dest: ~/
+        owner: leon
+        group: wheel
+        mode: 0644
+    - name: copy kube-controller-manager.kubeconfig
+      ansible.builtin.copy:
+        src: /home/leon/dev/k8s-learing/k8s-config/kube-controller-manager.kubeconfig
+        dest: ~/
+        owner: leon
+        group: wheel
+        mode: 0644
+    - name: copy kube-scheduler.kubeconfig
+      ansible.builtin.copy:
+        src: /home/leon/dev/k8s-learing/k8s-config/kube-scheduler.kubeconfig
+        dest: ~/
+        owner: leon
+        group: wheel
+        mode: 0644
+    - name: Copy Data Encryption Config
+      ansible.builtin.copy:
+        src: /home/leon/dev/k8s-learing/data-encryption-config/encryption-config.yaml
         dest: ~/
         owner: leon
         group: wheel

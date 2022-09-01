@@ -1,0 +1,51 @@
+- name: Bootstrap etcd
+  hosts: controller
+  tasks:
+    - name: Download etcd
+      become: yes
+      become_method: sudo
+      unarchive:
+        src: https://github.com/etcd-io/etcd/releases/download/v3.4.15/etcd-v3.4.15-linux-amd64.tar.gz
+        dest: /tmp
+        remote_src: yes
+        include:
+          - "etcd-v3.4.15-linux-amd64/etcd"
+    - name: copy etcd
+      become: yes
+      become_method: sudo
+      copy:
+        src: /tmp/etcd-v3.4.15-linux-amd64/etcd
+        remote_src: yes
+        dest: /usr/local/bin
+    - name: create directories
+      become: yes
+      become_method: sudo
+      file:
+        state: directory
+        path: /etc/etcd
+
+    - name: copy certs
+      become: yes
+      become_method: sudo
+      copy:
+        src: /home/leon/ca.pem
+        remote_src: yes
+        dest: /etc/etcd
+    - name: copy kube key
+      become: yes
+      become_method: sudo
+      copy:
+        src: /home/leon/kubernetes-key.pem
+        remote_src: yes
+        dest: /etc/etcd
+    - name: copy kube cert
+      become: yes
+      become_method: sudo
+      copy:
+        src: /home/leon/kubernetes.pem
+        remote_src: yes
+        dest: /etc/etcd
+
+
+
+

@@ -1,0 +1,15 @@
+#!/usr/bin/bash
+
+set -e
+
+./generate-ca
+./generate-client-cert
+./generate-kubelet-client-cert
+./generate-controller-manager-cert
+./generate-kube-proxy-cert
+./generate-scheduler-client-cert
+./generate-kube-api-cert
+./generate-service-account-cert
+
+
+

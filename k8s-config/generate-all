@@ -1,0 +1,9 @@
+#!/usr/bin/bash
+
+set -e
+
+./generate-admin-config
+./generate-controller-manager-config
+./generate-kube-proxy-config
+./generate-kube-scheduler-config
+./generate-worker-config
