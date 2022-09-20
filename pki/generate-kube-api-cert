@@ -1,7 +1,10 @@
 #!/usr/bin/bash
 
+DIR=${DIR:-certs}
+K8S_CSR_JSON=kubernetes-csr.json
+K8S_CSR=$DIR/$K8S_CSR_JSON
 
-cat > kubernetes-csr.json <<EOF
+cat > $K8S_CSR <<EOF
 {
   "CN": "kubernetes",
   "key": {
@@ -20,10 +23,10 @@ cat > kubernetes-csr.json <<EOF
 }
 EOF
 
-cfssl gencert \
+$(cd $DIR; cfssl gencert \
   -ca=ca.pem \
   -ca-key=ca-key.pem \
   -config=ca-config.json \
   -hostname=10.32.0.1,10.240.0.10,10.240.0.11,10.240.0.12,10.240.0.13,127.0.0.1,kubernetes.default \
   -profile=kubernetes \
-  kubernetes-csr.json | cfssljson -bare kubernetes
+  $K8S_CSR_JSON | cfssljson -bare kubernetes)

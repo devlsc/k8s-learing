@@ -1,5 +1,10 @@
+#!/usr/bin/bash
+DIR=${DIR:-certs}
 
-cat > kube-controller-manager-csr.json <<EOF
+MNGR_CSR_JSON=kube-controller-manager-csr.json
+MNGR_CSR=$DIR/$MNGR_CSR_JSON
+
+cat > $MNGR_CSR  <<EOF
 {
   "CN": "system:kube-controller-manager",
   "key": {
@@ -18,9 +23,9 @@ cat > kube-controller-manager-csr.json <<EOF
 }
 EOF
 
-cfssl gencert \
+$(cd $DIR; cfssl gencert \
   -ca=ca.pem \
   -ca-key=ca-key.pem \
   -config=ca-config.json \
   -profile=kubernetes \
-  kube-controller-manager-csr.json | cfssljson -bare kube-controller-manager
+  $MNGR_CSR_JSON | cfssljson -bare kube-controller-manager)

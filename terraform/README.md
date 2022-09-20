@@ -39,6 +39,7 @@ Currently it's stored in a local postgres instance
 ### TODOS
 - [ ] SEC-0001: remove sensitive data from state [read carefully](https://www.terraform.io/language/settings/backends/configuration#credentials-and-sensitive-data)
 - [ ] LIBVIRT-0001: checkout if there is a better workaround, than hardcoded ip-address ranges.
+- [ ] ETCD-0001: Remove hardcoded IP-Addresses from systemd service configuration
 
 
 ### Useful commands

@@ -1,8 +1,10 @@
 #!/usr/bin/bash
 
 
+DIR=${DIR:-certs}
+
 for num in 0 1 2; do
-cat > worker-${num}-csr.json <<EOF
+cat > $DIR/worker-${num}-csr.json <<EOF
 {
   "CN": "system:node:worker-${num}",
   "key": {
@@ -23,11 +25,11 @@ EOF
 
 INTERNAL_IP=$(dril worker-${num}.kubernetes)
 
-cfssl gencert \
+$(cd $DIR; cfssl gencert \
   -ca=ca.pem \
   -ca-key=ca-key.pem \
   -config=ca-config.json \
   -hostname=worker-${num},${INTERNAL_IP} \
   -profile=kubernetes \
-  worker-${num}-csr.json | cfssljson -bare worker-${num}
+  worker-${num}-csr.json | cfssljson -bare worker-${num})
 done

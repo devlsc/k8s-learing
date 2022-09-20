@@ -1,5 +1,8 @@
 #!/usr/bin/bash
-ADMIN_CSR="admin-csr.json"
+
+DIR=${DIR:-certs}
+ADMIN_CSR_JSON=admin-csr.json
+ADMIN_CSR=$DIR/$ADMIN_CSR_JSON
 
 cat > $ADMIN_CSR <<EOF
 {
@@ -20,11 +23,11 @@ cat > $ADMIN_CSR <<EOF
 }
 EOF
 
-cfssl gencert \
+$(cd $DIR; cfssl gencert \
   -ca=ca.pem \
   -ca-key=ca-key.pem \
   -config=ca-config.json \
   -profile=kubernetes \
-  $ADMIN_CSR | cfssljson -bare admin
+  $ADMIN_CSR_JSON | cfssljson -bare admin)
 
 

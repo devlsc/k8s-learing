@@ -4,23 +4,23 @@ set -e
 
 
 KUBERNETES_LB_ADDRESS=$(drill lb-0.kubernetes -Q)
-PKI="../pki"
+PKI="../pki/certs"
 
 kubectl config set-cluster kubernetes-the-hard-way \
     --certificate-authority=${PKI}/ca.pem \
     --embed-certs=true \
     --server=https://${KUBERNETES_LB_ADDRESS}:6443 \
-    --kubeconfig=kube-proxy.kubeconfig
+    --kubeconfig=configs/kube-proxy.kubeconfig
 
 kubectl config set-credentials system:kube-proxy \
   --client-certificate=${PKI}/kube-proxy.pem \
   --client-key=${PKI}/kube-proxy-key.pem \
   --embed-certs=true \
-  --kubeconfig=kube-proxy.kubeconfig
+  --kubeconfig=configs/kube-proxy.kubeconfig
 
 kubectl config set-context default \
   --cluster=kubernetes-the-hard-way \
   --user=system:kube-proxy \
-  --kubeconfig=kube-proxy.kubeconfig
+  --kubeconfig=configs/kube-proxy.kubeconfig
 
-kubectl config use-context default --kubeconfig=kube-proxy.kubeconfig
+kubectl config use-context default --kubeconfig=configs/kube-proxy.kubeconfig

@@ -3,3 +3,6 @@ CentOS-7-x86_64-GenericCloud.qcow2
 *.tfstate
 *.qcow2
 terraform/**/data
+pki/certs
+k8s-config/configs
+encryption-config.yaml

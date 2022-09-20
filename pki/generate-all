@@ -2,6 +2,9 @@
 
 set -e
 
+mkdir -p certs 
+
+DIR="certs"
 ./generate-ca
 ./generate-client-cert
 ./generate-kubelet-client-cert

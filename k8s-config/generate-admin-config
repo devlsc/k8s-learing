@@ -1,22 +1,22 @@
 #!/usr/bin/bash
 
-PKI="../pki"
+PKI="../pki/certs"
 
 kubectl config set-cluster kubernetes-the-hard-way \
   --certificate-authority=${PKI}/ca.pem \
   --embed-certs=true \
   --server=https://127.0.0.1:6443 \
-  --kubeconfig=admin.kubeconfig
+  --kubeconfig=configs/admin.kubeconfig
 
 kubectl config set-credentials admin \
   --client-certificate=${PKI}/admin.pem \
   --client-key=${PKI}/admin-key.pem \
   --embed-certs=true \
-  --kubeconfig=admin.kubeconfig
+  --kubeconfig=configs/admin.kubeconfig
 
 kubectl config set-context default \
   --cluster=kubernetes-the-hard-way \
   --user=admin \
-  --kubeconfig=admin.kubeconfig
+  --kubeconfig=configs/admin.kubeconfig
 
-kubectl config use-context default --kubeconfig=admin.kubeconfig
+kubectl config use-context default --kubeconfig=configs/admin.kubeconfig

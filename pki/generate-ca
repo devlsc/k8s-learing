@@ -1,7 +1,11 @@
 #!/usr/bin/bash
 
-CA_CONFIG="ca-config.json"
-CA_CSR="ca-csr.json" 
+DIR=${DIR:-certs}
+CA_CONFIG=$DIR"/ca-config.json"
+CA_CSR=$DIR"/ca-csr.json" 
+
+echo $DIR
+
 
 cat > $CA_CONFIG <<EOF
 {
@@ -38,5 +42,5 @@ cat > $CA_CSR <<EOF
 }
 EOF
 
-cfssl gencert -initca ca-csr.json | cfssljson -bare ca
+$(cd $DIR; cfssl gencert -initca ca-csr.json | cfssljson -bare ca)
 

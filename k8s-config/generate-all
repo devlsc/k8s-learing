@@ -2,6 +2,8 @@
 
 set -e
 
+mkdir -p configs
+
 ./generate-admin-config
 ./generate-controller-manager-config
 ./generate-kube-proxy-config

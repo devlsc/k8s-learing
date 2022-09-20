@@ -41,7 +41,7 @@ module "load-balancer" {
 
 module "kubernetes-controller" {
   source    = "../../modules/vm-instance"
-  amount    = 4
+  amount    = 3
   ip_offset = 10
   ip_prefix = "10.240.0"
   volume = {

@@ -1,6 +1,10 @@
 #!/usr/bin/bash
 
-cat > kube-scheduler-csr.json <<EOF
+DIR=${DIR:-certs}
+SCHED_CSR_JSON=kube-scheduler-csr.json
+SCHED_CSR=$DIR/$SCHED_CSR_JSON
+
+cat > $SCHED_CSR <<EOF
 {
   "CN": "system:kube-scheduler",
   "key": {
@@ -19,10 +23,10 @@ cat > kube-scheduler-csr.json <<EOF
 }
 EOF
 
-cfssl gencert \
+$(cd $DIR; cfssl gencert \
   -ca=ca.pem \
   -ca-key=ca-key.pem \
   -config=ca-config.json \
   -profile=kubernetes \
-  kube-scheduler-csr.json | cfssljson -bare kube-scheduler
+  $SCHED_CSR_JSON | cfssljson -bare kube-scheduler)
 
