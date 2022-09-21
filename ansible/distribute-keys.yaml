@@ -1,0 +1,38 @@
+- name: CA configuration worker
+  hosts: workers
+  tasks:
+    - name: copy worker keys
+      ansible.builtin.copy:
+        src: "{{ item }}" 
+        dest: ~/
+        owner: leon
+        group: wheel
+        mode: 0644
+      with_items:
+        - /home/leon/dev/k8s-learing/pki/certs/{{ inventory_hostname|replace('.kubernetes','') }}-key.pem
+        - /home/leon/dev/k8s-learing/pki/certs/{{ inventory_hostname|replace('.kubernetes','') }}.pem
+        - /home/leon/dev/k8s-learing/pki/certs/ca.pem
+        - /home/leon/dev/k8s-learing/k8s-config/configs/{{ inventory_hostname|replace('.kubernetes','') }}.kubeconfig
+
+- name: Config files for the controllers
+  hosts: controller
+  tasks:
+    - name: copy kubernetes.pem
+      ansible.builtin.copy:
+        src: "{{ item }}"
+        dest: ~/
+        owner: leon
+        group: wheel
+        mode: 0644
+      with_items:
+        - /home/leon/dev/k8s-learing/pki/certs/kubernetes.pem
+        - /home/leon/dev/k8s-learing/pki/certs/kubernetes-key.pem
+        - /home/leon/dev/k8s-learing/pki/certs/ca-key.pem
+        - /home/leon/dev/k8s-learing/pki/certs/ca.pem
+        - /home/leon/dev/k8s-learing/pki/certs/service-account-key.pem
+        - /home/leon/dev/k8s-learing/pki/certs/service-account.pem
+        - /home/leon/dev/k8s-learing/k8s-config/configs/admin.kubeconfig
+        - /home/leon/dev/k8s-learing/k8s-config/configs/kube-controller-manager.kubeconfig
+        - /home/leon/dev/k8s-learing/k8s-config/configs/kube-scheduler.kubeconfig
+        - /home/leon/dev/k8s-learing/k8s-config/static/kube-scheduler.yaml
+        - /home/leon/dev/k8s-learing/data-encryption-config/encryption-config.yaml

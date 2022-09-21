@@ -1,6 +1,5 @@
 - name: Bootstrap etcd
   hosts: controller
-      
   tasks:
     - name: Download etcd
       become: yes
@@ -67,7 +66,7 @@
         state: directory
         owner: leon
         group: leon
-    - name: Enable and start systemd
+    - name: Enable and start etcd
       become: yes
       become_method: sudo
       systemd:
