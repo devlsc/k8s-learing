@@ -20,3 +20,4 @@ kubectl config set-context default \
   --kubeconfig=configs/admin.kubeconfig
 
 kubectl config use-context default --kubeconfig=configs/admin.kubeconfig
+

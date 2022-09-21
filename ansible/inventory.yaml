@@ -11,6 +11,7 @@ controller:
 client:
   hosts:
     client-0.kubernetes:
+
 load-balancer:
   hosts:
     lb-0.kubernetes:

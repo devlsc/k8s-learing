@@ -1,18 +1,18 @@
 - name: Bootstrap etcd
   hosts: controller
   tasks:
-    # - name: Download
-    #   become: yes
-    #   become_method: sudo
-    #   get_url:
-    #     url: "{{ item }}"
-    #     dest: /usr/local/bin
-    #     mode: +x
-    #   with_items:
-    #     - https://storage.googleapis.com/kubernetes-release/release/v1.12.0/bin/linux/amd64/kube-apiserver
-    #     - https://storage.googleapis.com/kubernetes-release/release/v1.12.0/bin/linux/amd64/kube-controller-manager
-    #     - https://storage.googleapis.com/kubernetes-release/release/v1.12.0/bin/linux/amd64/kube-scheduler
-    #     - https://storage.googleapis.com/kubernetes-release/release/v1.12.0/bin/linux/amd64/kubectl
+    - name: Download
+      become: yes
+      become_method: sudo
+      get_url:
+        url: "{{ item }}"
+        dest: /usr/local/bin
+        mode: +x
+      with_items:
+        - https://storage.googleapis.com/kubernetes-release/release/v1.12.0/bin/linux/amd64/kube-apiserver
+        - https://storage.googleapis.com/kubernetes-release/release/v1.12.0/bin/linux/amd64/kube-controller-manager
+        - https://storage.googleapis.com/kubernetes-release/release/v1.12.0/bin/linux/amd64/kube-scheduler
+        - https://storage.googleapis.com/kubernetes-release/release/v1.12.0/bin/linux/amd64/kubectl
     - name: create directories
       become: yes
       become_method: sudo
@@ -71,3 +71,7 @@
         - kube-api
         - kube-controller-manager
         - kube-scheduler
+    - name: configure rbac
+      command:
+        cmd: /usr/local/bin/kubectl apply --kubeconfig admin.kubeconfig -f ~/rbac.yaml
+

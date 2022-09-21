@@ -33,7 +33,7 @@ module "load-balancer" {
   }
   network_name = "kubernetes"
   domain = {
-    memory = "256"
+    memory = "1024"
     name   = "lb"
     vcpu   = 1
   }

@@ -1,3 +1,4 @@
 - import_playbook: distribute-keys.yaml
 - import_playbook: etcd-bootstrap.yaml
 - import_playbook: kubernetes-control-plane.yaml
+- import_playbook: load-balancer.yaml

@@ -13,7 +13,6 @@
         - /home/leon/dev/k8s-learing/pki/certs/{{ inventory_hostname|replace('.kubernetes','') }}.pem
         - /home/leon/dev/k8s-learing/pki/certs/ca.pem
         - /home/leon/dev/k8s-learing/k8s-config/configs/{{ inventory_hostname|replace('.kubernetes','') }}.kubeconfig
-
 - name: Config files for the controllers
   hosts: controller
   tasks:
@@ -35,4 +34,5 @@
         - /home/leon/dev/k8s-learing/k8s-config/configs/kube-controller-manager.kubeconfig
         - /home/leon/dev/k8s-learing/k8s-config/configs/kube-scheduler.kubeconfig
         - /home/leon/dev/k8s-learing/k8s-config/static/kube-scheduler.yaml
+        - /home/leon/dev/k8s-learing/k8s-config/static/rbac.yaml
         - /home/leon/dev/k8s-learing/data-encryption-config/encryption-config.yaml
