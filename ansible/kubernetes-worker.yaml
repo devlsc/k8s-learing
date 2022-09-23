@@ -1,21 +1,19 @@
 - name: Bootstrap worker
   hosts: workers
   tasks:
-    # - name: Download
-    #   become: yes
-    #   become_method: sudo
-    #   get_url:
-    #     url: "{{ item }}"
-    #     dest: /usr/local/bin
-    #     mode: +x
-    #   with_items:
-    #     - https://github.com/kubernetes-sigs/cri-tools/releases/download/v1.12.0/crictl-v1.12.0-linux-amd64.tar.gz
-    #     - https://storage.googleapis.com/kubernetes-the-hard-way/runsc-50c283b9f56bb7200938d9e207355f05f79f0d17
-    #     - https://github.com/opencontainers/runc/releases/download/v1.0.0-rc5/runc.amd64
-    #     - https://github.com/containernetworking/plugins/releases/download/v0.6.0/cni-plugins-amd64-v0.6.0.tgz
-    #     - https://github.com/containerd/containerd/releases/download/v1.2.0-rc.0/containerd-1.2.0-rc.0.linux-amd64.tar.gz
-    #     - https://storage.googleapis.com/kubernetes-release/release/v1.12.0/bin/linux/amd64/kube-proxy
-    #     - https://storage.googleapis.com/kubernetes-release/release/v1.12.0/bin/linux/amd64/kubelet
+    - name: copy worker keys
+      copy:
+        src: "{{ item }}" 
+        dest: ~/
+        owner: leon
+        group: wheel
+        mode: 0644
+      loop:
+        - /home/leon/dev/k8s-learing/pki/certs/{{ inventory_hostname|replace('.kubernetes','') }}-key.pem
+        - /home/leon/dev/k8s-learing/pki/certs/{{ inventory_hostname|replace('.kubernetes','') }}.pem
+        - /home/leon/dev/k8s-learing/pki/certs/ca.pem
+        - /home/leon/dev/k8s-learing/k8s-config/configs/{{ inventory_hostname|replace('.kubernetes','') }}.kubeconfig
+        - /home/leon/dev/k8s-learing/k8s-config/configs/kube-proxy.kubeconfig
     - name: Install dependencies
       become: true
       become_user: root
@@ -24,4 +22,105 @@
           - socat
           - conntrack
           - ipset
+    - name: create directories
+      become: yes
+      become_method: sudo
+      file:
+        state: directory
+        path: "{{item}}"
+      loop:
+        - /etc/cni/net.d
+        - /opt/cni/bin
+        - /var/lib/kubelet
+        - /var/lib/kube-proxy
+        - /var/lib/kubernetes 
+        - /var/run/kubernetes
+        - /etc/containerd
+        - /usr/local/bin
+    - name: Download
+      become: yes
+      become_method: sudo
+      get_url:
+        url: "{{ item.src }}"
+        dest: /usr/local/bin/{{item.name}}
+        mode: +x
+      loop:
+        - {src: https://storage.googleapis.com/kubernetes-the-hard-way/runsc-50c283b9f56bb7200938d9e207355f05f79f0d17, name: runsc}
+        - {src: https://github.com/opencontainers/runc/releases/download/v1.0.0-rc5/runc.amd64, name: runc}
+        - {src: https://storage.googleapis.com/kubernetes-release/release/v1.12.0/bin/linux/amd64/kube-proxy, name: kube-proxy}
+        - {src: https://storage.googleapis.com/kubernetes-release/release/v1.12.0/bin/linux/amd64/kubelet, name: kubelet}
+    - name: Download archives
+      become: yes
+      become_method: sudo
+      unarchive:
+        src: "{{item.src}}"
+        dest: "{{item.dest}}"
+        remote_src: yes
+        mode: +x
+      loop:
+        - {src: "https://github.com/containernetworking/plugins/releases/download/v0.6.0/cni-plugins-amd64-v0.6.0.tgz", dest: "/opt/cni/bin"}
+        - {src: "https://github.com/containerd/containerd/releases/download/v1.2.0-rc.0/containerd-1.2.0-rc.0.linux-amd64.tar.gz", dest: "/bin"}
+        - {src: "https://github.com/kubernetes-sigs/cri-tools/releases/download/v1.12.0/crictl-v1.12.0-linux-amd64.tar.gz", dest: "/usr/local/bin"}
+    
+    
+    - name: Copy Cni config
+      become: yes
+      become_method: sudo
+      template: 
+        src: "{{item.src}}"
+        dest: "{{item.dest}}"
+      loop:
+        - {src: template/kubelet-config.yaml.j2, dest: /var/lib/kubelet/kubelet-config.yaml}
+        - {src: template/10-bridge.conf.j2, dest: /etc/cni/net.d/10-bridge.conf}
+    - name: copy configs
+      become: yes
+      become_method: sudo
+      copy:
+        src: "{{item.src}}"
+        dest: "{{item.dest}}"
+      loop:
+        - {src: /home/leon/dev/k8s-learing/k8s-config/static/99-loopback.conf, dest: /etc/cni/net.d}
+        - {src: /home/leon/dev/k8s-learing/k8s-config/static/containerd.service, dest: /etc/systemd/system}
+        - {src: /home/leon/dev/k8s-learing/k8s-config/static/containerd-config.toml, dest: /etc/containerd/config.toml}
+        - {src: /home/leon/dev/k8s-learing/k8s-config/static/kubelet.service, dest: /etc/systemd/system}
+        - {src: /home/leon/dev/k8s-learing/k8s-config/static/kube-proxy-config.yaml, dest: /var/lib/kube-proxy}
+        - {src: /home/leon/dev/k8s-learing/k8s-config/static/kube-proxy.service, dest: /etc/systemd/system}
+    
+    - name: copy files
+      become: yes
+      become_method: sudo
+      copy:
+        src: "{{item.src}}"
+        dest: "{{item.dest}}"
+        remote_src: yes
+      loop:
+        - {src: "/home/leon/{{ inventory_hostname|replace('.kubernetes','') }}.pem", dest: /var/lib/kubelet}
+        - {src: "/home/leon/{{ inventory_hostname|replace('.kubernetes','') }}-key.pem", dest: /var/lib/kubelet}
+        - {src: "/home/leon/ca.pem", dest: /var/lib/kubernetes}
+        - {src: "/home/leon/{{ inventory_hostname|replace('.kubernetes','') }}.kubeconfig", dest: /var/lib/kubelet/kubeconfig}
+        - {src: "/home/leon/kube-proxy.kubeconfig", dest: /var/lib/kube-proxy/kubeconfig}
+    - name: disable swap
+      become: yes
+      become_method: sudo
+      shell: |
+        swapoff -a
+    - name: Disable swap via fstab
+      become: yes
+      become_method: sudo
+      replace:
+        path: /etc/fstab
+        regexp: '^([^#].*?\sswap\s+sw\s+.*)$'
+        replace: '# \1'
+    - name: Start services
+      become: yes
+      become_method: sudo
+      systemd:
+        name: "{{item}}"
+        enabled: yes
+        daemon_reload: yes
+        state: restarted
+      loop:
+        - containerd
+        - kubelet
+        - kube-proxy
 

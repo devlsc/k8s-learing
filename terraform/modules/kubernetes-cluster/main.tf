@@ -62,7 +62,8 @@ module "worker" {
   ip_offset = 200
   ip_prefix = "10.240.0"
   volume = {
-    source = "/home/leon/dev/k8s-learing/terraform/base-image/Fedora-Cloud-Base-36-1.5.x86_64.qcow2"
+    # since fedora 31 cgroup2 is by default enabled, k8s the hardway is a little bit outdated and does not support cgroup2
+    source = "/home/leon/dev/k8s-learing/terraform/base-image/Fedora-Cloud-Base-30-1.2.x86_64.qcow2"
     format = "qcow2"
   }
   network_name = "kubernetes"

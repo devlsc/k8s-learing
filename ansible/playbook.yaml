@@ -2,3 +2,4 @@
 - import_playbook: etcd-bootstrap.yaml
 - import_playbook: kubernetes-control-plane.yaml
 - import_playbook: load-balancer.yaml
+- import_playbook: kubernetes-worker.yaml

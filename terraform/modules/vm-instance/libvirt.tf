@@ -44,8 +44,8 @@ resource "libvirt_domain" "vm-instance" {
     # in case I try to assign higher addresses.
     #
     # Could be a regression: https://github.com/dmacvicar/terraform-provider-libvirt/issues/708
-    addresses      = ["${var.ip_prefix}.${var.ip_offset + count.index}"]
-    wait_for_lease = "true"
+    addresses = ["${var.ip_prefix}.${var.ip_offset + count.index}"]
+    # wait_for_lease = "true"
   }
 
   disk {

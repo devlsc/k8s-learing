@@ -29,23 +29,14 @@
       become: yes
       become_method: sudo
       copy:
-        src: /home/leon/ca.pem
+        src: '{{item}}'
         remote_src: yes
         dest: /etc/etcd
-    - name: copy kube key
-      become: yes
-      become_method: sudo
-      copy:
-        src: /home/leon/kubernetes-key.pem
-        remote_src: yes
-        dest: /etc/etcd
-    - name: copy kube cert
-      become: yes
-      become_method: sudo
-      copy:
-        src: /home/leon/kubernetes.pem
-        remote_src: yes
-        dest: /etc/etcd
+      with_items:
+        - /home/leon/ca.pem
+        - /home/leon/kubernetes-key.pem
+        - /home/leon/kubernetes.pem
+
     - name: Set ETCD cluster name
       become: yes
       become_method: sudo
